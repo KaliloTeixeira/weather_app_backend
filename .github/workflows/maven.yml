@@ -20,6 +20,6 @@ jobs:
         distribution: 'adopt'
         cache: maven
     - name: STEP 2 -> Build with Maven
-      run: mvn --file ./Cityweather/pom.xml clean instalL
+      run: mvn --file ./Cityweather/pom.xml clean install
     - name: STEP 3 -> Test wih Maven
       run: mvn --file ./Cityweather/pom.xml test
