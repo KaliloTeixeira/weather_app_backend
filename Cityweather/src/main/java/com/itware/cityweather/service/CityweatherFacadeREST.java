@@ -5,6 +5,7 @@
 package com.itware.cityweather.service;
 
 import com.itware.cityweather.Cityweather;
+import com.itware.cityweather.resources.WeatherAPI;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -81,6 +82,7 @@ public class CityweatherFacadeREST extends AbstractFacade<Cityweather> {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response find(@PathParam("id") Integer id) {
+        WeatherAPI.updateAllWeatherFromApi();
         try {
             Cityweather cityweather = super.find(id);
             if (cityweather == null) {
