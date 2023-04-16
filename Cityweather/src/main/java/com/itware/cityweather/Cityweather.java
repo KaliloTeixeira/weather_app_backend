@@ -5,7 +5,7 @@
 package com.itware.cityweather;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Timestamp;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -48,8 +48,8 @@ public class Cityweather implements Serializable {
     @Column(name = "temperature")
     private Double temperature;
     @Column(name = "time")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date time;
+    //@Temporal(TemporalType.TIMESTAMP)
+    private Timestamp time;
 
     public Cityweather() {
     }
@@ -82,11 +82,11 @@ public class Cityweather implements Serializable {
         this.temperature = temperature;
     }
 
-    public Date getTime() {
+    public Timestamp getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(Timestamp time) {
         this.time = time;
     }
 
@@ -112,7 +112,12 @@ public class Cityweather implements Serializable {
 
     @Override
     public String toString() {
-        return "com.itware.cityweather.Cityweather[ id=" + id + " ]";
+        return "Cityweather{" +
+                "id=" + id +
+                ", cityname='" + cityname + '\'' +
+                ", temperature=" + temperature +
+                ", time=" + time +
+                '}';
     }
     
 }

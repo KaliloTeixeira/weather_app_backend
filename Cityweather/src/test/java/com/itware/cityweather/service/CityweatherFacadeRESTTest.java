@@ -60,8 +60,8 @@ public class CityweatherFacadeRESTTest {
     /**
      * Test of remove method, of class CityweatherFacadeREST.
      */
-    @Ignore
     @Test
+    @Ignore
     public void testRemove_GenericType() throws Exception {
         System.out.println("remove");
         Cityweather entity = null;
@@ -76,8 +76,8 @@ public class CityweatherFacadeRESTTest {
     /**
      * Test of find method, of class CityweatherFacadeREST.
      */
-    @Ignore
     @Test
+    @Ignore
     public void testFind_Object() throws Exception {
         System.out.println("find");
         Object id = null;
@@ -169,6 +169,39 @@ public class CityweatherFacadeRESTTest {
         CityweatherFacadeREST instance = (CityweatherFacadeREST)container.getContext().lookup("java:global/classes/CityweatherFacadeREST");
         List<Cityweather> expResult = null;
         List<Cityweather> result = instance.findAll();
+        assertEquals(expResult, result);
+        container.close();
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of updateAllWeatherFromApi method, of class CityweatherFacadeREST.
+     */
+    @Test
+    @Ignore
+    public void testUpdateAllWeatherFromApi() throws Exception {
+        System.out.println("updateAllWeatherFromApi");
+        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
+        CityweatherFacadeREST instance = (CityweatherFacadeREST)container.getContext().lookup("java:global/classes/CityweatherFacadeREST");
+        instance.updateAllWeatherFromApi();
+        container.close();
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of updateWeatherFromApiByCityname method, of class CityweatherFacadeREST.
+     */
+    @Test
+    @Ignore
+    public void testUpdateWeatherFromApiByCityname() throws Exception {
+        System.out.println("updateWeatherFromApiByCityname");
+        Cityweather cityweather = null;
+        EJBContainer container = javax.ejb.embeddable.EJBContainer.createEJBContainer();
+        CityweatherFacadeREST instance = (CityweatherFacadeREST)container.getContext().lookup("java:global/classes/CityweatherFacadeREST");
+        String expResult = "";
+        String result = instance.updateWeatherFromApiByCityname(cityweather);
         assertEquals(expResult, result);
         container.close();
         // TODO review the generated test code and remove the default call to fail.

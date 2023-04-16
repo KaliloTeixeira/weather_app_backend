@@ -75,8 +75,8 @@ Create a client-server application, the main function is to show a cities weathe
 |Backend|Rest API: addCity|Implement and test the addCity API. Save data to database.|:white_check_mark:|
 |Backend|Rest API: listCities|Implement and test listCities API. Have to load data from local DB.|:white_check_mark:|
 |Backend|Rest API: deleteCity|Implement and test deleteCity API. Have to delete data from local DB.|:white_check_mark:|
-|Backend|openweathermap API client|Implement a client that calls openweatherapi.org weather REST API by city name. The result must be saved to our local database.|--|
-|Backend|Scheduled update service|Implement a the update service which update the cities data from the openweather api.|--|
+|Backend|openweathermap API client|Implement a client that calls openweatherapi.org weather REST API by city name. The result must be saved to our local database.|:white_check_mark:|
+|Backend|Scheduled update service|Implement a the update service which update the cities data from the openweather api.|:white_check_mark:|
 |Backend|Dependency Injection|Use DI to use Java EE components: update service (EJB), entityManager (JPA) etc...|:white_check_mark:|
 |Backend|Error handling|Handle errors in the Rest API with general way.|:white_check_mark:|
 |Backend|Logging|Log the events what happens in the REST API.|:white_check_mark:|
