@@ -17,6 +17,12 @@ Project made during application for Intern Position at ITWare.
 1. Authentication
 1. Session management
 
+**Angular 8+**
+1. Basic project structure
+1. Components
+1. Page layout
+1. Service providers
+
 ## **Homework description**
 Create a client-server application, the main function is to show a cities weather (temperature) data on a simple web interface, so we call our application "WeatherApp"
 
@@ -46,6 +52,16 @@ Create a client-server application, the main function is to show a cities weathe
 1. Build and deploy application.
 1. Test application's Rest API
 
+#### **Frontend**
+1. Create Angular 4 project
+1. Create a user interface components as shown below in the diagram
+   0. app.component
+   0. search.component
+   0. citylist.component
+   0. cityitem.component
+1. Connect server side calls
+1. Build + Run + Test the application
+
 
 ## **Checklist**
 
@@ -64,4 +80,14 @@ Create a client-server application, the main function is to show a cities weathe
 |Backend|Dependency Injection|Use DI to use Java EE components: update service (EJB), entityManager (JPA) etc...|:white_check_mark:|
 |Backend|Error handling|Handle errors in the Rest API with general way.|:white_check_mark:|
 |Backend|Logging|Log the events what happens in the REST API.|:white_check_mark:|
+|Frontend|Create project structure|Create a new empty Angular project with Hello Weather message only.|--|
+|Frontend|Build and deploy project|Build and run the empty project on a webserver.|--|
+|Frontend|Component: Add city component|Create the visuals of the Add city component, without REST calls.|--|
+|Frontend|Component: List cities component|Create the visuals of the List cities component, without REST calls.|--|
+|Frontend|Component: City listitem component|Create the visuals of the City listitem component.|--|
+|Frontend|Main application component|Layout the other component into the main app screen.|--|
+|Frontend|REST: addCity integration|Add server side integration to the Add city component (addCity API call)|--|
+|Frontend|REST: listCity integration|Add server side integration to the List cities component (listCities API call)|--|
+|Frontend|REST: deleteCity integration|Add server side integration to the City listitem component (deleteCity API call)|--|
+|Frontend|Error handling|Handle and visualize possible error messages from the server.|--|
 |<p>Backend +</p><p>Frontend</p>|CHECK ALL THE APPLICATION IS WORKING?|CHECK ALL THE APPLICATION IS WORKING?|--|
