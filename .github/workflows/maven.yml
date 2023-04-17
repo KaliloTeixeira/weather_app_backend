@@ -21,6 +21,8 @@ jobs:
         cache: maven
     - name: Install Heroku CLI
       run: curl https://cli-assets.heroku.com/install.sh | sh
+    - name: Debug HEROKU_API_KEY
+      run: echo $HEROKU_API_KEY
     - name: Log in to Heroku
       run: |
         heroku access -a weatherapp-kalilo
