@@ -29,6 +29,7 @@ jobs:
       with:
         heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
         heroku_app_name: "weatherapp-kalilo"
+        heroku_email: "you@example.com"
     - name: STEP 3 -> Build with Maven
       run: mvn --file ./Cityweather/pom.xml clean install
     - name: STEP 4 -> Test wih Maven
@@ -40,3 +41,4 @@ jobs:
         heroku_app_name: "weatherapp-kalilo"
         heroku_email: "you@example.com"
         heroku_jar_file: "./Cityweather/target/Cityweather-1.0-SNAPSHOT-jar-with-dependencies.jar"
+
