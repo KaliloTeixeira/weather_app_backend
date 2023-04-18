@@ -1,39 +1,50 @@
 name: WeatherApp CI
 
 on:
+  name: Build, Test, and Deploy
+
+on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  build-test-deploy:
     runs-on: ubuntu-latest
 
     env:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 
+    strategy:
+      matrix:
+        java-version: [ '1.8' ]
+        os: [ ubuntu-latest ]
+
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 1.8
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK ${{ matrix.java-version }}
       uses: actions/setup-java@v1
       with:
-        java-version: '1.8'
+        java-version: ${{ matrix.java-version }}
         distribution: 'adopt'
         cache: maven
-    - name: Debug HEROKU_API_KEY
-      run: echo $HEROKU_API_KEY
-    - name: Build with Maven
-      run: mvn --file ./pom.xml clean install
-    - name: Move generated .war file
-      run: mv target/Cityweather-1.0.war .
-    - name: Test with Maven
-      run: mvn --file ./pom.xml test
-    - name: Deploy to Heroku
+
+    - name: Build and package
+      run: |
+        mvn --file ./pom.xml clean package --batch-mode --errors --fail-at-end
+
+    - name: Test
+      run: |
+        mvn --file ./pom.xml test --batch-mode --errors --fail-at-end
+
+    - name: Deploy
       uses: akhileshns/heroku-deploy@v3.12.12
       with:
         heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
         heroku_app_name: "weatherapp-kalilo"
         heroku_email: "kalilo555@usp.br"
-        war_heroku: "Cityweather-1.0.war"
+        war_heroku: "target/Cityweather-1.0.war"
+
