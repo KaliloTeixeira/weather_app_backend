@@ -118,6 +118,7 @@ public class CityweatherFacadeREST extends AbstractFacade<Cityweather> {
     @Override
     @Produces(MediaType.APPLICATION_JSON)
     public List<Cityweather> findAll() {
+        System.out.println("Finding all Iniciated");
         try {
             LOGGER.log(Level.INFO, "Finding all entities.");
             return super.findAll();
