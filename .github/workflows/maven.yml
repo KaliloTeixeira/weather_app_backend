@@ -36,4 +36,4 @@ jobs:
         heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
         heroku_app_name: "weatherapp-kalilo"
         heroku_email: "kalilo555@usp.br"
-        heroku_jar: "Cityweather-1.0.war"
+        war_heroku: "Cityweather-1.0.war"
