@@ -43,7 +43,7 @@ public class CityweatherFacadeREST extends AbstractFacade<Cityweather> {
     private static final Logger LOGGER = Logger.getLogger(CityweatherFacadeREST.class.getName());
     private static final String API_URL = "https://api.openweathermap.org/data/2.5/weather";
     private static final String API_KEY = "2b986aead4d3682a2eb8b8f8359831a7";
-    
+
     Client client = ClientBuilder.newClient();
 
     public CityweatherFacadeREST() {
@@ -58,7 +58,8 @@ public class CityweatherFacadeREST extends AbstractFacade<Cityweather> {
         String url = buildApiUrl(encodedCityName);
 
         JsonObject jsonObject = getJsonObjectFromApi(url);
-        entity.setTemperature(jsonObject.getJsonObject("main").getJsonNumber("temp").doubleValue());
+        double kelvinTemperature = jsonObject.getJsonObject("main").getJsonNumber("temp").doubleValue();
+        entity.setTemperature(kelvinToCelsius(kelvinTemperature));
         entity.setTime(new Timestamp(new Date().getTime()));
 
         try {
@@ -69,7 +70,6 @@ public class CityweatherFacadeREST extends AbstractFacade<Cityweather> {
             throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Error creating entity: " + e.getMessage()).build());
         }
     }
-
 
     @PUT
     @Path("{id}")
@@ -130,20 +130,20 @@ public class CityweatherFacadeREST extends AbstractFacade<Cityweather> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
-    }    
-    
+    }
+
     @Schedule(minute = "*/1", hour = "*", persistent = false)
     public void updateAllWeatherFromApi() {
         System.out.println("UPDATING ALL ENTITIES");
         List<Cityweather> cityweatherList = findAll();
 
-        for (Cityweather cityweather : cityweatherList){
+        for (Cityweather cityweather : cityweatherList) {
             System.out.println(cityweather);
             updateWeatherFromApiByCityname(cityweather);
-            
+
         }
     }
-    
+
     public String updateWeatherFromApiByCityname(Cityweather cityweather) {
         String encodedCityName = encodeCityName(cityweather.getCityname());
         String url = buildApiUrl(encodedCityName);
@@ -152,17 +152,18 @@ public class CityweatherFacadeREST extends AbstractFacade<Cityweather> {
         String jsonResponse = response.readEntity(String.class);
 
         Cityweather newCityweatherData = cityweather;
-        
+
         JsonObject jsonObject = Json.createReader(new StringReader(jsonResponse)).readObject();
-        newCityweatherData.setTemperature(jsonObject.getJsonObject("main").getJsonNumber("temp").doubleValue());
-        newCityweatherData.setTime( new Timestamp(new Date().getTime()));
-        
+        double kelvinTemperature = jsonObject.getJsonObject("main").getJsonNumber("temp").doubleValue();
+        newCityweatherData.setTemperature(kelvinToCelsius(kelvinTemperature));
+        newCityweatherData.setTime(new Timestamp(new Date().getTime()));
+
         edit(cityweather.getId(), newCityweatherData);
 
         response.close();
         return jsonResponse;
     }
-    
+
     private String encodeCityName(String cityName) {
         String encodedCityName = "";
         try {
@@ -171,6 +172,11 @@ public class CityweatherFacadeREST extends AbstractFacade<Cityweather> {
             Logger.getLogger(CityweatherFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
         }
         return encodedCityName;
+    }
+
+    private double kelvinToCelsius(double temperature) {
+        double celsius = temperature - 273.15;
+        return (double) Math.round(celsius);
     }
 
     private String buildApiUrl(String encodedCityName) {
