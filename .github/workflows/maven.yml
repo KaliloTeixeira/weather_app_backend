@@ -29,16 +29,15 @@ jobs:
       with:
         heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
         heroku_app_name: "weatherapp-kalilo"
-        heroku_email: "you@example.com"
+        heroku_email: "kalilo555@usp.br"
     - name: STEP 3 -> Build with Maven
-      run: mvn --file ./Cityweather/pom.xml clean install
-    - name: STEP 4 -> Test wih Maven
-      run: mvn --file ./Cityweather/pom.xml test
+      run: cd cityweather && mvn --file ./pom.xml clean install
+    - name: STEP 4 -> Test with Maven
+      run: cd cityweather && mvn --file ./pom.xml test
     - name: STEP 5 -> Deploy to Heroku
       uses: akhileshns/heroku-deploy@v3.12.12
       with:
         heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
         heroku_app_name: "weatherapp-kalilo"
-        heroku_email: "you@example.com"
-        heroku_jar_file: "./Cityweather/target/Cityweather-1.0-SNAPSHOT-jar-with-dependencies.jar"
-
+        heroku_email: "kalilo555@usp.br"
+        heroku_jar_file: "./cityweather/target/Cityweather-1.0-SNAPSHOT-jar-with-dependencies.jar"
