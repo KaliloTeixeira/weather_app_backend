@@ -99,32 +99,33 @@ public class CityweatherFacadeREST extends AbstractFacade<Cityweather> {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response find(@PathParam("id") Integer id) {
+    public Cityweather find(@PathParam("id") Integer id) {
         try {
             Cityweather cityweather = super.find(id);
             if (cityweather == null) {
                 LOGGER.log(Level.WARNING, "Entity not found with id: {0}", id);
-                return Response.status(Response.Status.NOT_FOUND).entity("Cityweather with id " + id + " not found").build();
+                throw new WebApplicationException("Cityweather with id " + id + " not found", Response.Status.NOT_FOUND);
             }
             LOGGER.log(Level.INFO, "Entity found with id: {0}", id);
-            return Response.ok(cityweather).build();
+            return cityweather;
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error finding entity: {0}", e.getMessage());
-            return Response.status(Response.Status.BAD_REQUEST).entity("Error finding entity: " + e.getMessage()).build();
+            throw new WebApplicationException("Error finding entity: " + e.getMessage(), Response.Status.BAD_REQUEST);
         }
     }
 
     @GET
-    @Override
+    @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Cityweather> findAll() {
-        System.out.println("Finding all Iniciated");
         try {
             LOGGER.log(Level.INFO, "Finding all entities.");
-            return super.findAll();
+            return getEntityManager()
+                    .createQuery("SELECT c FROM Cityweather c ORDER BY c.id DESC", Cityweather.class)
+                    .getResultList();
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Error finding all entities: {0}", e.getMessage());
-            throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Error finding all entities: " + e.getMessage()).build());
+            LOGGER.log(Level.SEVERE, "Error finding entities: {0}", e.getMessage());
+            throw new WebApplicationException("Error finding entities: " + e.getMessage(), Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -135,44 +136,49 @@ public class CityweatherFacadeREST extends AbstractFacade<Cityweather> {
 
     @Schedule(minute = "*/1", hour = "*", persistent = false)
     public void updateAllWeatherFromApi() {
-        System.out.println("UPDATING ALL ENTITIES");
+        LOGGER.log(Level.INFO, "Updating all entities.");
         List<Cityweather> cityweatherList = findAll();
 
         for (Cityweather cityweather : cityweatherList) {
             System.out.println(cityweather);
             updateWeatherFromApiByCityname(cityweather);
-
         }
     }
 
     public String updateWeatherFromApiByCityname(Cityweather cityweather) {
-        String encodedCityName = encodeCityName(cityweather.getCityname());
-        String url = buildApiUrl(encodedCityName);
+        try {
+            String encodedCityName = encodeCityName(cityweather.getCityname());
+            String url = buildApiUrl(encodedCityName);
 
-        Response response = client.target(url).request(MediaType.APPLICATION_JSON).get();
-        String jsonResponse = response.readEntity(String.class);
+            Response response = client.target(url).request(MediaType.APPLICATION_JSON).get();
+            if (response.getStatusInfo().getFamily() != Response.Status.Family.SUCCESSFUL) {
+                throw new WebApplicationException("Error calling weather API: " + response.getStatusInfo().getReasonPhrase(), response.getStatus());
+            }
 
-        Cityweather newCityweatherData = cityweather;
+            String jsonResponse = response.readEntity(String.class);
+            Cityweather newCityweatherData = cityweather;
 
-        JsonObject jsonObject = Json.createReader(new StringReader(jsonResponse)).readObject();
-        double kelvinTemperature = jsonObject.getJsonObject("main").getJsonNumber("temp").doubleValue();
-        newCityweatherData.setTemperature(kelvinToCelsius(kelvinTemperature));
-        newCityweatherData.setTime(new Timestamp(new Date().getTime()));
+            JsonObject jsonObject = Json.createReader(new StringReader(jsonResponse)).readObject();
+            double kelvinTemperature = jsonObject.getJsonObject("main").getJsonNumber("temp").doubleValue();
+            newCityweatherData.setTemperature(kelvinToCelsius(kelvinTemperature));
+            newCityweatherData.setTime(new Timestamp(new Date().getTime()));
 
-        edit(cityweather.getId(), newCityweatherData);
+            edit(cityweather.getId(), newCityweatherData);
 
-        response.close();
-        return jsonResponse;
+            response.close();
+            return jsonResponse;
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error updating weather data for city {0}: {1}", new Object[]{cityweather.getCityname(), e.getMessage()});
+            throw new WebApplicationException("Error updating weather data for city " + cityweather.getCityname() + ": " + e.getMessage(), Response.Status.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private String encodeCityName(String cityName) {
-        String encodedCityName = "";
         try {
-            encodedCityName = URLEncoder.encode(cityName, StandardCharsets.UTF_8.toString());
+            return URLEncoder.encode(cityName, StandardCharsets.UTF_8.toString());
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(CityweatherFacadeREST.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("Error encoding city name: " + ex.getMessage(), ex);
         }
-        return encodedCityName;
     }
 
     private double kelvinToCelsius(double temperature) {
@@ -185,10 +191,14 @@ public class CityweatherFacadeREST extends AbstractFacade<Cityweather> {
     }
 
     private JsonObject getJsonObjectFromApi(String url) {
-        Response response = client.target(url).request(MediaType.APPLICATION_JSON).get();
-        String jsonResponse = response.readEntity(String.class);
-        response.close();
-        client.close();
-        return Json.createReader(new StringReader(jsonResponse)).readObject();
+        Client client = ClientBuilder.newClient();
+        try {
+            Response response = client.target(url).request(MediaType.APPLICATION_JSON).get();
+            String jsonResponse = response.readEntity(String.class);
+            return Json.createReader(new StringReader(jsonResponse)).readObject();
+        } finally {
+            client.close();
+        }
     }
+
 }
