@@ -37,10 +37,10 @@ jobs:
       run: |
         mvn --file ./pom.xml test --batch-mode --errors --fail-at-end
 
-    - name: Deploy
-      uses: akhileshns/heroku-deploy@v3.12.12
-      with:
-        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-        heroku_app_name: "weatherapp-kalilo"
-        heroku_email: "kalilo555@usp.br"
-        war_heroku: "target/Cityweather-1.0.war"
+#    - name: Deploy
+#      uses: akhileshns/heroku-deploy@v3.12.12
+#      with:
+#        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+#        heroku_app_name: "weatherapp-kalilo"
+#        heroku_email: "kalilo555@usp.br"
+#        war_heroku: "target/Cityweather-1.0.war"
