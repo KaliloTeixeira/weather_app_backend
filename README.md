@@ -7,6 +7,14 @@
 ## **Lesson goals**
 Project made during application for Intern Position at ITWare.
 
+### To Run
+
+// Clone the repository
+- git clone
+
+// Run the project with your IDE using a Server (Glassfish / Tomcat)
+
+
 **Java EE 6+**
 1. Java EE Project structure
 1. Rest WebServices (JAX-RS)
