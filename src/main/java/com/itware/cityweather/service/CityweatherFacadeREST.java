@@ -32,7 +32,7 @@ import javax.ws.rs.core.Response;
 
 /**
  *
- * @author kalil
+ * @author kalilo goncalves
  */
 @Stateless
 @Path("cityweather")
@@ -48,6 +48,11 @@ public class CityweatherFacadeREST extends AbstractFacade<Cityweather> {
 
     public CityweatherFacadeREST() {
         super(Cityweather.class);
+    }
+    
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
     }
 
     @POST
@@ -129,11 +134,6 @@ public class CityweatherFacadeREST extends AbstractFacade<Cityweather> {
         }
     }
 
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-
     @Schedule(minute = "*/5", hour = "*", persistent = false)
     public void updateAllWeatherFromApi() {
         LOGGER.log(Level.INFO, "Updating all entities.");
@@ -145,7 +145,7 @@ public class CityweatherFacadeREST extends AbstractFacade<Cityweather> {
         }
     }
 
-    public String updateWeatherFromApiByCityname(Cityweather cityweather) {
+    private String updateWeatherFromApiByCityname(Cityweather cityweather) {
         try {
             String encodedCityName = encodeCityName(cityweather.getCityname());
             String url = buildApiUrl(encodedCityName);
@@ -181,15 +181,6 @@ public class CityweatherFacadeREST extends AbstractFacade<Cityweather> {
         }
     }
 
-    private double kelvinToCelsius(double temperature) {
-        double celsius = temperature - 273.15;
-        return (double) Math.round(celsius);
-    }
-
-    private String buildApiUrl(String encodedCityName) {
-        return API_URL + "?q=" + encodedCityName + "&appid=" + API_KEY;
-    }
-
     private JsonObject getJsonObjectFromApi(String url) {
         Client client = ClientBuilder.newClient();
         try {
@@ -200,5 +191,13 @@ public class CityweatherFacadeREST extends AbstractFacade<Cityweather> {
             client.close();
         }
     }
+    
+    private double kelvinToCelsius(double temperature) {
+        double celsius = temperature - 273.15;
+        return (double) Math.round(celsius);
+    }
 
+    private String buildApiUrl(String encodedCityName) {
+        return API_URL + "?q=" + encodedCityName + "&appid=" + API_KEY;
+    }
 }
