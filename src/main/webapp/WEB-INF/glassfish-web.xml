@@ -16,6 +16,14 @@
     SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
 -->
 <glassfish-web-app error-url="">
+  <resource-ref>
+    <res-ref-name>ResourceInfo</res-ref-name>
+    <jndi-name>java:app/weatherapp__pm</jndi-name>
+  </resource-ref>
+  <resource-ref>
+    <res-ref-name>applicationName</res-ref-name>
+    <jndi-name>ejb-app4097261711742330566</jndi-name>
+  </resource-ref>
   <class-loader delegate="true"/>
   <jsp-config>
     <property name="keepgenerated" value="true">

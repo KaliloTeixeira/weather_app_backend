@@ -134,7 +134,7 @@ public class CityweatherFacadeREST extends AbstractFacade<Cityweather> {
         return em;
     }
 
-    @Schedule(minute = "*/1", hour = "*", persistent = false)
+    @Schedule(minute = "*/5", hour = "*", persistent = false)
     public void updateAllWeatherFromApi() {
         LOGGER.log(Level.INFO, "Updating all entities.");
         List<Cityweather> cityweatherList = findAll();
