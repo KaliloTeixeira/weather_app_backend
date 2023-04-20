@@ -145,7 +145,7 @@ public class CityweatherFacadeREST extends AbstractFacade<Cityweather> {
         }
     }
 
-    private String updateWeatherFromApiByCityname(Cityweather cityweather) {
+    public String updateWeatherFromApiByCityname(Cityweather cityweather) {
         try {
             String encodedCityName = encodeCityName(cityweather.getCityname());
             String url = buildApiUrl(encodedCityName);
