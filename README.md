@@ -12,7 +12,7 @@ Project made during application for Intern Position at ITWare.
 1. Rest WebServices (JAX-RS)
 1. Dependency Injection (DI)
 1. Java Persistence API (JPA)
-1. Background servies (Scedulers)
+1. Background services (Scedulers)
 1. Access external services via Rest API (Rest Client)
 1. Authentication
 1. Session management
@@ -29,8 +29,8 @@ Create a client-server application, the main function is to show a cities weathe
 
 ### **Use cases**
 1. Add new city weather data
-1. Get list of weaher data from our local database
-1. Delete city from out local database
+1. Get list of weather data from our local database
+1. Delete city from our local database
 
 ### **Tasks to be completed**
 #### **Backend**
@@ -41,7 +41,7 @@ Create a client-server application, the main function is to show a cities weathe
       0. cityname - name of the city
       0. temperature - the last known temperature of the city
       0. time - the time of the measurement
-1. Confure application server.
+1. Configure application server.
 1. Create services and Rest interfaces.
 1. Build and deploy application.
 1. Test application's Rest API
@@ -64,4 +64,4 @@ Create a client-server application, the main function is to show a cities weathe
 |Backend|Dependency Injection|Use DI to use Java EE components: update service (EJB), entityManager (JPA) etc...|:white_check_mark:|
 |Backend|Error handling|Handle errors in the Rest API with general way.|:white_check_mark:|
 |Backend|Logging|Log the events what happens in the REST API.|:white_check_mark:|
-|<p>Backend +</p><p>Frontend</p>|CHECK ALL THE APPLICATION IS WORKING?|CHECK ALL THE APPLICATION IS WORKING?|--|
+|<p>Backend +</p><p>Frontend</p>|CHECK ALL THE APPLICATION IS WORKING?|CHECK ALL THE APPLICATION IS WORKING?|:white_check_mark:|
